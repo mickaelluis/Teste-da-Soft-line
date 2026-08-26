@@ -59,5 +59,7 @@ $router->get('/usuario', 'App\Controllers\Usuario\UsuarioPages@index', "App\Midd
 // Rotas Backend (API JSON)
 $router->post('/api/login', 'App\Controllers\AuthController\Login@entrar');
 $router->post('/api/register', 'App\Controllers\AuthController\Register@cadastrar');
+$router->post('/api/clientes', 'App\Controllers\Clientes\Clientes@inserir_Clientes', "App\Middlewares\AuthMiddleware@verificar");
+$router->post('/api/produtos', 'App\Controllers\Produto\Produto@inserir_Produto', "App\Middlewares\AuthMiddleware@verificar");
 
 $router->run();

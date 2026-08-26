@@ -29,6 +29,12 @@ class Register extends BaseController {
                 return $this->responder(409, "Este e-mail não pode ser registrado, tente outro.");
             }
             return $this->responder(200, "Usuario cadastrado com sucesso!!");
+        } catch (\PDOException $e) {
+            error_log($e->getMessage());
+            if($e->getCode() === "23000"){
+                return $this->responder(409, "Este e-mail não pode ser registrado, tente outro.");
+            }
+            return $this->responder(500, "Falha ao cadastrar usuario, tente mais tarde!");
         } catch (\Throwable $e) {
             error_log($e->getMessage());
             return $this->responder(500, "Falha ao cadastrar usuario, tente mais tarde!");

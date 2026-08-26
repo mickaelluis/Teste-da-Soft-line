@@ -1,0 +1,138 @@
+{
+  "info": {
+    "name": "Soft-line teste dev",
+    "description": "API Soft-line. O login usa sessao PHP: a variavel `token` guarda o PHPSESSID para as rotas protegidas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "email",
+      "value": "teste@email.com"
+    },
+    {
+      "key": "senha",
+      "value": "123456"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Usuario Teste\",\n  \"email\": \"{{email}}\",\n  \"senha\": \"{{senha}}\",\n  \"confirm_senha\": \"{{senha}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/register"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const baseUrl = pm.collectionVariables.get('baseUrl');",
+                  "    const cookie = pm.cookies.get('PHPSESSID', baseUrl);",
+                  "    if (cookie) {",
+                  "        pm.collectionVariables.set('token', cookie);",
+                  "        console.log('token (PHPSESSID) salvo:', cookie);",
+                  "    } else {",
+                  "        console.warn('PHPSESSID nao encontrado. Verifique se cookies estao habilitados no Postman.');",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"senha\": \"{{senha}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Inserir Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": 1,\n  \"nome\": \"Cliente Teste\",\n  \"fantasia\": \"Fantasia Teste LTDA\",\n  \"documento\": \"12345678901\",\n  \"cep\": \"01310100\",\n  \"estado\": \"SP\",\n  \"cidade\": \"Sao Paulo\",\n  \"bairro\": \"Bela Vista\",\n  \"rua\": \"Av Paulista\",\n  \"numero\": \"1000\"\n}"
+            },
+            "url": "{{baseUrl}}/api/clientes"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produtos",
+      "item": [
+        {
+          "name": "Inserir Produto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Produto Teste\",\n  \"codigo\": 1,\n  \"descricao\": \"Descricao do produto\",\n  \"codigo_de_barras\": \"7891234567890\",\n  \"valor\": 19.99,\n  \"peso_bruto\": 1.250,\n  \"peso_liquido\": 1.000\n}"
+            },
+            "url": "{{baseUrl}}/api/produtos"
+          }
+        }
+      ]
+    }
+  ]
+}
