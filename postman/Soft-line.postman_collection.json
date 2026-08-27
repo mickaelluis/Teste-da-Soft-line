@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Soft-line teste dev",
-    "description": "API Soft-line. O login usa sessao PHP: a variavel `token` guarda o PHPSESSID para as rotas protegidas.\n\nOrdem sugerida:\n1. Auth > Login\n2. Clientes / Produtos\n3. Usuario > Buscar / Atualizar / Desconectar / Deletar",
+    "description": "API Soft-line. O login usa sessao PHP: a variavel `token` guarda o PHPSESSID para as rotas protegidas.\n\nOrdem sugerida:\n1. Auth > Register / Login\n2. Clientes / Produtos\n3. Usuario > Buscar / Atualizar / Desconectar / Deletar",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -56,6 +56,42 @@
           }
         },
         {
+          "name": "Register (email duplicado)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Outro Usuario\",\n  \"email\": \"{{email}}\",\n  \"senha\": \"{{senha}}\",\n  \"confirm_senha\": \"{{senha}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/register",
+            "description": "Esperado: 409 - Este e-mail nao pode ser registrado, tente outro."
+          }
+        },
+        {
+          "name": "Register (senhas diferentes)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Usuario Teste\",\n  \"email\": \"novo@email.com\",\n  \"senha\": \"123456\",\n  \"confirm_senha\": \"654321\"\n}"
+            },
+            "url": "{{baseUrl}}/api/register",
+            "description": "Esperado: 400 - As duas senha tem que ser iguais"
+          }
+        },
+        {
           "name": "Login",
           "event": [
             {
@@ -89,7 +125,26 @@
               "mode": "raw",
               "raw": "{\n  \"email\": \"{{email}}\",\n  \"senha\": \"{{senha}}\"\n}"
             },
-            "url": "{{baseUrl}}/api/login"
+            "url": "{{baseUrl}}/api/login",
+            "description": "Salva PHPSESSID em {{token}} para as rotas protegidas."
+          }
+        },
+        {
+          "name": "Login (credenciais invalidas)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"senha\": \"senha_errada\"\n}"
+            },
+            "url": "{{baseUrl}}/api/login",
+            "description": "Esperado: 400 - Email ou senha invalido, por favor tentar outro"
           }
         }
       ]
@@ -569,6 +624,27 @@
           }
         },
         {
+          "name": "Atualizar Usuario (email)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/usuario"
+          }
+        },
+        {
           "name": "Atualizar Usuario (senha)",
           "request": {
             "method": "PUT",
@@ -584,9 +660,52 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"senha\": \"123456\",\n  \"confirm_senha\": \"123456\"\n}"
+              "raw": "{\n  \"senha\": \"{{senha}}\",\n  \"confirm_senha\": \"{{senha}}\"\n}"
             },
             "url": "{{baseUrl}}/api/usuario"
+          }
+        },
+        {
+          "name": "Atualizar Usuario (completo)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuario Completo\",\n  \"email\": \"{{email}}\",\n  \"senha\": \"{{senha}}\",\n  \"confirm_senha\": \"{{senha}}\"\n}"
+            },
+            "url": "{{baseUrl}}/api/usuario"
+          }
+        },
+        {
+          "name": "Atualizar Usuario (senhas diferentes)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senha\": \"123456\",\n  \"confirm_senha\": \"654321\"\n}"
+            },
+            "url": "{{baseUrl}}/api/usuario",
+            "description": "Esperado: 400 - As duas senha tem que ser iguais"
           }
         },
         {
