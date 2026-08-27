@@ -8,6 +8,10 @@ class AuthPages extends BaseController
 {
     public function login()
     {
+        if (isset($_SESSION['id_usuario'])) {
+            $_SESSION = [];
+            session_destroy();
+        }
         $this->view('login/login.html');
     }
 

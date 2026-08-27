@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email VARCHAR(100) NOT NULL UNIQUE,
     nome VARCHAR(60) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    UNIQUE (email),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -19,6 +20,8 @@ CREATE TABLE IF NOT EXISTS produtos (
     peso_bruto DECIMAL(10,3 ) NOT NULL,
     peso_liquido DECIMAL(10,3 ) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,   
+    UNIQUE KEY uk_produtos_codigo_barras (id_usuario, codigo_de_barras),
+    UNIQUE KEY uk_produtos_codigo (id_usuario, codigo),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
@@ -29,6 +32,8 @@ CREATE TABLE IF NOT EXISTS clientes (
     nome VARCHAR(60) NOT NULL,
     fantasia VARCHAR(100) NOT NULL,
     documento VARCHAR(14) NOT NULL,
+    UNIQUE KEY uk_clientes_documento (id_usuario, documento),
+    UNIQUE KEY uk_clientes_codigo (id_usuario, codigo),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 

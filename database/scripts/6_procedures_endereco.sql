@@ -1,8 +1,19 @@
+USE softline;
+
 DELIMITER $
 CREATE PROCEDURE select_enderecos (
     IN p_id_clientes int
 ) BEGIN 
 SELECT id, cep, estado, cidade, bairro, rua, numero FROM endereco WHERE id_clientes = p_id_clientes;
+END $  
+DELIMITER ;
+
+DELIMITER $
+CREATE PROCEDURE select_endereco (
+    IN p_id int,
+    IN p_id_clientes int
+) BEGIN 
+SELECT id, cep, estado, cidade, bairro, rua, numero FROM endereco WHERE id = p_id AND id_clientes = p_id_clientes;
 END $  
 DELIMITER ;
 

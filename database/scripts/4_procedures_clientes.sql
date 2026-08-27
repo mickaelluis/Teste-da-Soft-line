@@ -1,3 +1,5 @@
+USE softline;
+
 DELIMITER $
 CREATE PROCEDURE select_clientes (
     IN p_id_usuario int
@@ -56,7 +58,7 @@ DELIMITER ;
 
 DELIMITER $
 CREATE PROCEDURE deletar_clientes (
-    IN p_id_cliente int,  
+    IN p_id_usuario int,  
     IN p_id int
 ) BEGIN 
 DELETE FROM clientes WHERE (id = p_id AND id_usuario = p_id_usuario); 

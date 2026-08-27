@@ -16,7 +16,7 @@ class Login extends BaseController{
                 return $this->responder(400, "Email ou senha invalido, por favor tentar outro"); 
             }
             if(!password_verify($senha, $usuario['password'])){
-                return $this->responder(400, "Email ou senha invalido, por favor tentar outroo"); 
+                return $this->responder(400, "Email ou senha invalido, por favor tentar outro"); 
             }
             session_regenerate_id(true);
             $_SESSION['id_usuario'] = $usuario['id'];

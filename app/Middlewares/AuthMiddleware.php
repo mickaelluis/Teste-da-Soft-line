@@ -5,7 +5,7 @@ use App\router\AppPaths;
 
 class AuthMiddleware {
     public function verificar() {
-        if (!isset($_SESSION['email'])) {
+        if (!isset($_SESSION['id_usuario'])) {
             $Rota = AppPaths::rotaReal();
             if(str_contains($Rota, "/api")){
                 http_response_code(401);

@@ -1,5 +1,7 @@
 FROM php:8.3-apache
 
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 COPY . /var/www/html
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
@@ -13,3 +15,5 @@ RUN a2enmod rewrite
 RUN sed -ri -e 's!AllowOverride None!AllowOverride All!g' /etc/apache2/apache2.conf
 
 RUN docker-php-ext-install pdo pdo_mysql
+
+RUN composer install --no-dev --no-interaction --working-dir=/var/www/html

@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Soft-line teste dev",
-    "description": "API Soft-line. O login usa sessao PHP: a variavel `token` guarda o PHPSESSID para as rotas protegidas.",
+    "description": "API Soft-line. O login usa sessao PHP: a variavel `token` guarda o PHPSESSID para as rotas protegidas.\n\nOrdem sugerida:\n1. Auth > Login\n2. Clientes / Produtos\n3. Usuario > Buscar / Atualizar / Desconectar / Deletar",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -20,6 +20,18 @@
     {
       "key": "token",
       "value": ""
+    },
+    {
+      "key": "id_cliente",
+      "value": "1"
+    },
+    {
+      "key": "id_endereco",
+      "value": "1"
+    },
+    {
+      "key": "id_produto",
+      "value": "1"
     }
   ],
   "item": [
@@ -86,6 +98,42 @@
       "name": "Clientes",
       "item": [
         {
+          "name": "Listar Clientes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/clientes"
+          }
+        },
+        {
+          "name": "Buscar Cliente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cliente?id={{id_cliente}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cliente"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_cliente}}"
+                }
+              ]
+            }
+          }
+        },
+        {
           "name": "Inserir Cliente",
           "request": {
             "method": "POST",
@@ -105,12 +153,205 @@
             },
             "url": "{{baseUrl}}/api/clientes"
           }
+        },
+        {
+          "name": "Atualizar Cliente (nome)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{id_cliente}},\n  \"nome\": \"Cliente Atualizado\"\n}"
+            },
+            "url": "{{baseUrl}}/api/clientes"
+          }
+        },
+        {
+          "name": "Atualizar Cliente (endereco)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{id_cliente}},\n  \"id_endereco\": {{id_endereco}},\n  \"cidade\": \"Campinas\",\n  \"bairro\": \"Centro\"\n}"
+            },
+            "url": "{{baseUrl}}/api/clientes"
+          }
+        },
+        {
+          "name": "Atualizar Cliente (completo)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{id_cliente}},\n  \"codigo\": 2,\n  \"nome\": \"Cliente Completo\",\n  \"fantasia\": \"Fantasia Atualizada LTDA\",\n  \"documento\": \"98765432100\",\n  \"id_endereco\": {{id_endereco}},\n  \"cep\": \"13010000\",\n  \"estado\": \"SP\",\n  \"cidade\": \"Campinas\",\n  \"bairro\": \"Centro\",\n  \"rua\": \"Rua Barão de Jaguara\",\n  \"numero\": \"500\"\n}"
+            },
+            "url": "{{baseUrl}}/api/clientes"
+          }
+        },
+        {
+          "name": "Atualizar Cliente (documento duplicado)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{id_cliente}},\n  \"documento\": \"12345678901\"\n}"
+            },
+            "url": "{{baseUrl}}/api/clientes",
+            "description": "Esperado: 409 - Esse documento ja esta cadastrado. O banco valida duplicidade via UNIQUE."
+          }
+        },
+        {
+          "name": "Deletar Cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cliente?id={{id_cliente}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cliente"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_cliente}}"
+                }
+              ]
+            },
+            "description": "DELETE /api/cliente?id={{id_cliente}}. Remove o cliente e o endereco vinculado (ON DELETE CASCADE)."
+          }
+        },
+        {
+          "name": "Deletar Cliente (nao encontrado)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cliente?id=999999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cliente"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "999999"
+                }
+              ]
+            },
+            "description": "Esperado: 404 - Cliente nao encontrado"
+          }
         }
       ]
     },
     {
       "name": "Produtos",
       "item": [
+        {
+          "name": "Listar Produtos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/produtos"
+          }
+        },
+        {
+          "name": "Buscar Produto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/produto?id={{id_produto}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "produto"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_produto}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Produto (nao encontrado)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/produto?id=999999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "produto"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "999999"
+                }
+              ]
+            },
+            "description": "Esperado: 404 - Produto nao encontrado"
+          }
+        },
         {
           "name": "Inserir Produto",
           "request": {
@@ -131,6 +372,278 @@
             },
             "url": "{{baseUrl}}/api/produtos"
           }
+        },
+        {
+          "name": "Inserir Produto (codigo de barras duplicado)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Produto Duplicado\",\n  \"codigo\": 2,\n  \"descricao\": \"Teste duplicidade\",\n  \"codigo_de_barras\": \"7891234567890\",\n  \"valor\": 9.99,\n  \"peso_bruto\": 0.500,\n  \"peso_liquido\": 0.450\n}"
+            },
+            "url": "{{baseUrl}}/api/produtos",
+            "description": "Esperado: 409 - Esse codigo de barras ja esta cadastrado, tente outro!"
+          }
+        },
+        {
+          "name": "Atualizar Produto (nome)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{id_produto}},\n  \"nome\": \"Produto Atualizado\"\n}"
+            },
+            "url": "{{baseUrl}}/api/produtos"
+          }
+        },
+        {
+          "name": "Atualizar Produto (completo)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{id_produto}},\n  \"nome\": \"Produto Completo\",\n  \"codigo\": 3,\n  \"descricao\": \"Descricao atualizada\",\n  \"codigo_de_barras\": \"7899999999999\",\n  \"valor\": 29.90,\n  \"peso_bruto\": 2.000,\n  \"peso_liquido\": 1.800\n}"
+            },
+            "url": "{{baseUrl}}/api/produtos"
+          }
+        },
+        {
+          "name": "Atualizar Produto (codigo de barras duplicado)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": {{id_produto}},\n  \"codigo_de_barras\": \"7891234567890\"\n}"
+            },
+            "url": "{{baseUrl}}/api/produtos",
+            "description": "Esperado: 409 - Esse codigo de barras ja esta cadastrado, tente outro!"
+          }
+        },
+        {
+          "name": "Atualizar Produto (nao encontrado)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 999999,\n  \"nome\": \"Produto Inexistente\"\n}"
+            },
+            "url": "{{baseUrl}}/api/produtos",
+            "description": "Esperado: 404 - Produto nao encontrado"
+          }
+        },
+        {
+          "name": "Deletar Produto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/produto?id={{id_produto}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "produto"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_produto}}"
+                }
+              ]
+            },
+            "description": "DELETE /api/produto?id={{id_produto}}"
+          }
+        },
+        {
+          "name": "Deletar Produto (nao encontrado)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/produto?id=999999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "produto"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "999999"
+                }
+              ]
+            },
+            "description": "Esperado: 404 - Produto nao encontrado"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuario",
+      "item": [
+        {
+          "name": "Buscar Usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/usuario"
+          }
+        },
+        {
+          "name": "Atualizar Usuario (nome)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuario Atualizado\"\n}"
+            },
+            "url": "{{baseUrl}}/api/usuario"
+          }
+        },
+        {
+          "name": "Atualizar Usuario (senha)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senha\": \"123456\",\n  \"confirm_senha\": \"123456\"\n}"
+            },
+            "url": "{{baseUrl}}/api/usuario"
+          }
+        },
+        {
+          "name": "Desconectar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/desconectar",
+            "description": "Limpa a sessao e remove o cookie PHPSESSID."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('token', '');",
+                  "    console.log('token limpo apos desconectar');",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deletar Usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/usuario",
+            "description": "Remove o usuario e encerra a sessao. Clientes/produtos somem por CASCADE."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('token', '');",
+                  "    console.log('token limpo apos deletar usuario');",
+                  "}"
+                ]
+              }
+            }
+          ]
         }
       ]
     }

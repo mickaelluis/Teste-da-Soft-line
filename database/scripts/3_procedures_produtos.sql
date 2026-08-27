@@ -1,3 +1,5 @@
+USE softline;
+
 DELIMITER $
 CREATE PROCEDURE select_produtos (
     IN p_id_usuario int
