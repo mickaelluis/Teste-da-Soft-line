@@ -29,6 +29,11 @@ class Produto extends BaseController{
                 }
             }
 
+            if (filter_var($codigo, FILTER_VALIDATE_INT) === false) {
+                return $this->responder(400, "Campo codigo so pode ser numerico");
+            }
+            $codigo = (int) $codigo;
+
             if( mb_strlen($nome) > 100){
                 return $this->responder(400, "Campo nome deve ter menos que 100 caracteres");
             }
@@ -51,6 +56,18 @@ class Produto extends BaseController{
 
             if(!is_numeric($peso_liquido) || $peso_liquido <= 0){
                 return $this->responder(400, "Campo peso líquido deve ser um numero maior que zero");
+            }
+
+            if ($valor > 99999999.99) {
+                return $this->responder(400, "Campo valor excede o limite permitido");
+            }
+
+            if ($peso_bruto > 9999999.999) {
+                return $this->responder(400, "Campo peso bruto excede o limite permitido");
+            }
+
+            if ($peso_liquido > 9999999.999) {
+                return $this->responder(400, "Campo peso liquido excede o limite permitido");
             }
 
             $ProdutoModels = new ProdutosModels();
@@ -121,6 +138,13 @@ class Produto extends BaseController{
                 return $this->responder(400, "Campo obrigatório: id");
             }
 
+            if ($codigo !== null) {
+                if (filter_var($codigo, FILTER_VALIDATE_INT) === false) {
+                    return $this->responder(400, "Campo codigo so pode ser numerico");
+                }
+                $codigo = (int) $codigo;
+            }
+
             if ($nome !== null && mb_strlen($nome) > 100){
                 return $this->responder(400, "Campo nome deve ter menos que 100 caracteres");
             }
@@ -143,6 +167,18 @@ class Produto extends BaseController{
 
             if ($peso_liquido !== null && (!is_numeric($peso_liquido) || $peso_liquido <= 0)){
                 return $this->responder(400, "Campo peso líquido deve ser um numero maior que zero");
+            }
+
+            if ($valor !== null && $valor > 99999999.99) {
+                return $this->responder(400, "Campo valor excede o limite permitido");
+            }
+
+            if ($peso_bruto !== null && $peso_bruto > 9999999.999) {
+                return $this->responder(400, "Campo peso bruto excede o limite permitido");
+            }
+
+            if ($peso_liquido !== null && $peso_liquido > 9999999.999) {
+                return $this->responder(400, "Campo peso liquido excede o limite permitido");
             }
 
             $ProdutoModels = new ProdutosModels();

@@ -4,7 +4,7 @@ DELIMITER $
 CREATE PROCEDURE select_produtos (
     IN p_id_usuario int
 ) BEGIN 
-SELECT id, nome, codigo, valor FROM produtos WHERE id_usuario = p_id_usuario;
+SELECT id, nome, codigo, valor, codigo_de_barras FROM produtos WHERE id_usuario = p_id_usuario;
 END $  
 DELIMITER ;
 

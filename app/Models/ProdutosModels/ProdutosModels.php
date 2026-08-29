@@ -19,7 +19,13 @@ class ProdutosModels{
             throw new \RuntimeException;
         }
         $stmt->closeCursor();
-        return $produtos;
+        return array_map(fn(array $produto) => [
+            'id' => $produto['id'] ?? null,
+            'nome' => $produto['nome'] ?? null,
+            'codigo' => $produto['codigo'] ?? null,
+            'valor' => $produto['valor'] ?? null,
+            'codigo_de_barras' => $produto['codigo_de_barras'] ?? null,
+        ], $produtos);
     }
 
     public function buscar_Produto($id_produto, $id){

@@ -5,15 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Cliente</title>
     <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
     <script src="/assets/js/tema.js"></script>
 </head>
-<body>
-    <main class="login">
-        <section class="login__card">
-            <h1 class="login__titulo">Cadastro de Cliente</h1>
-            <p class="login__subtitulo">Página em construção</p>
-            <a class="botao botao--secundario" href="/clientes">Voltar à lista</a>
-        </section>
+<body class="app-body">
+    <header class="app-topo">
+        <a class="app-marca" href="/home">Sistema de Cadastro de Produtos</a>
+        <nav class="app-nav">
+            <a href="/home" data-nav="home">Home</a>
+            <a href="/produtos" data-nav="produtos">Produtos</a>
+            <a href="/clientes" data-nav="clientes">Clientes</a>
+            <a href="/usuario" data-nav="usuario">Usuário</a>
+        </nav>
+        <div class="app-acoes">
+            <span id="tema-slot"></span>
+            <button type="button" class="botao botao--pequeno botao--secundario" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <main class="app-conteudo">
+        <div class="pagina-cabecalho">
+            <div>
+                <h1 id="pagina-titulo">Cadastro de Cliente</h1>
+                <p id="pagina-subtitulo">Preencha os dados do cliente</p>
+            </div>
+        </div>
+
+        <form class="cartao form-grade form-grade--2" id="form-cliente" novalidate>
+            <label class="campo" for="codigo">
+                <span>Código</span>
+                <input type="text" id="codigo" name="codigo" inputmode="numeric" maxlength="10" required>
+                <small class="campo__erro" id="erro-codigo"></small>
+            </label>
+
+            <label class="campo" for="nome">
+                <span>Nome</span>
+                <input type="text" id="nome" name="nome" maxlength="60" required>
+                <small class="campo__erro" id="erro-nome"></small>
+            </label>
+
+            <label class="campo" for="fantasia">
+                <span>Fantasia</span>
+                <input type="text" id="fantasia" name="fantasia" maxlength="100" required>
+                <small class="campo__erro" id="erro-fantasia"></small>
+            </label>
+
+            <label class="campo" for="documento">
+                <span>Documento (CPF ou CNPJ)</span>
+                <div class="campo-documento" id="campo-documento-cadastro" data-visivel="false">
+                    <input type="text" id="documento" name="documento" inputmode="numeric" data-mascara="documento" maxlength="18" required>
+                    <button type="button" class="campo-documento__toggle" aria-label="Mostrar documento"></button>
+                </div>
+                <small class="campo__erro" id="erro-documento"></small>
+            </label>
+
+            <h2 class="secao-titulo campo--largo" id="titulo-endereco">Endereço</h2>
+
+            <div class="form-grade form-grade--3 campo--largo" id="bloco-endereco">
+                <label class="campo" for="cep">
+                    <span>CEP</span>
+                    <input type="text" id="cep" name="cep" inputmode="numeric" data-mascara="cep" maxlength="9" required>
+                    <small class="campo__erro" id="erro-cep"></small>
+                </label>
+
+                <label class="campo" for="estado">
+                    <span>Estado</span>
+                    <select id="estado" name="estado" required>
+                        <option value="">Selecione</option>
+                        <option value="AC">AC</option>
+                        <option value="AL">AL</option>
+                        <option value="AP">AP</option>
+                        <option value="AM">AM</option>
+                        <option value="BA">BA</option>
+                        <option value="CE">CE</option>
+                        <option value="DF">DF</option>
+                        <option value="ES">ES</option>
+                        <option value="GO">GO</option>
+                        <option value="MA">MA</option>
+                        <option value="MT">MT</option>
+                        <option value="MS">MS</option>
+                        <option value="MG">MG</option>
+                        <option value="PA">PA</option>
+                        <option value="PB">PB</option>
+                        <option value="PR">PR</option>
+                        <option value="PE">PE</option>
+                        <option value="PI">PI</option>
+                        <option value="RJ">RJ</option>
+                        <option value="RN">RN</option>
+                        <option value="RS">RS</option>
+                        <option value="RO">RO</option>
+                        <option value="RR">RR</option>
+                        <option value="SC">SC</option>
+                        <option value="SP">SP</option>
+                        <option value="SE">SE</option>
+                        <option value="TO">TO</option>
+                    </select>
+                    <small class="campo__erro" id="erro-estado"></small>
+                </label>
+
+                <label class="campo" for="cidade">
+                    <span>Cidade</span>
+                    <input type="text" id="cidade" name="cidade" maxlength="100" required>
+                    <small class="campo__erro" id="erro-cidade"></small>
+                </label>
+
+                <label class="campo" for="bairro">
+                    <span>Bairro</span>
+                    <input type="text" id="bairro" name="bairro" maxlength="100" required>
+                    <small class="campo__erro" id="erro-bairro"></small>
+                </label>
+
+                <label class="campo" for="rua">
+                    <span>Rua</span>
+                    <input type="text" id="rua" name="rua" maxlength="100" required>
+                    <small class="campo__erro" id="erro-rua"></small>
+                </label>
+
+                <label class="campo" for="numero">
+                    <span>Número</span>
+                    <input type="text" id="numero" name="numero" maxlength="10" required>
+                    <small class="campo__erro" id="erro-numero"></small>
+                </label>
+            </div>
+
+            <div class="form-acoes campo--largo">
+                <button type="submit" class="botao" id="botao-salvar">Confirmar</button>
+                <a class="botao botao--secundario" href="/clientes">Voltar à lista</a>
+            </div>
+        </form>
     </main>
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/cliente.js"></script>
 </body>
 </html>

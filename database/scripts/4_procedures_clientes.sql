@@ -4,7 +4,7 @@ DELIMITER $
 CREATE PROCEDURE select_clientes (
     IN p_id_usuario int
 ) BEGIN 
-SELECT id,codigo, nome FROM clientes WHERE id_usuario = p_id_usuario;
+SELECT id,codigo, nome,fantasia,documento  FROM clientes WHERE id_usuario = p_id_usuario;
 END $  
 DELIMITER ;
 
@@ -14,15 +14,6 @@ CREATE PROCEDURE select_cliente (
     IN p_id_usuario int
 ) BEGIN 
 SELECT id,codigo, nome, fantasia, documento FROM clientes WHERE id_usuario = p_id_usuario AND id = p_id;
-END $  
-DELIMITER ;
-
-DELIMITER $
-CREATE PROCEDURE select_cliente_documento (
-    IN p_id_usuario int,
-    IN p_documento VARCHAR(14)
-) BEGIN 
-SELECT id, codigo, nome, fantasia, documento FROM clientes WHERE id_usuario = p_id_usuario AND documento = p_documento;
 END $  
 DELIMITER ;
 

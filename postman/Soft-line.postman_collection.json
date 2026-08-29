@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Soft-line teste dev",
-    "description": "API Soft-line. O login usa sessao PHP: a variavel `token` guarda o PHPSESSID para as rotas protegidas.\n\nOrdem sugerida:\n1. Auth > Register / Login\n2. Clientes / Produtos\n3. Usuario > Buscar / Atualizar / Desconectar / Deletar",
+    "description": "API Soft-line. O login usa sessao PHP: a variavel `token` guarda o PHPSESSID para as rotas protegidas.\n\nOrdem sugerida:\n1. Auth > Register / Login\n2. Clientes (PUT/DELETE /api/cliente; POST/DELETE /api/endereco) / Produtos\n3. Usuario > Buscar / Atualizar / Desconectar / Deletar",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -99,15 +99,42 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "if (pm.response.code === 200) {",
-                  "    const baseUrl = pm.collectionVariables.get('baseUrl');",
-                  "    const cookie = pm.cookies.get('PHPSESSID', baseUrl);",
+                  "if (pm.response.code !== 200) {",
+                  "    console.warn('Login falhou. Status:', pm.response.code);",
+                  "    return;",
+                  "}",
+                  "",
+                  "function extrairPhpSessId() {",
+                  "    let cookie = pm.cookies.get('PHPSESSID');",
                   "    if (cookie) {",
-                  "        pm.collectionVariables.set('token', cookie);",
-                  "        console.log('token (PHPSESSID) salvo:', cookie);",
-                  "    } else {",
-                  "        console.warn('PHPSESSID nao encontrado. Verifique se cookies estao habilitados no Postman.');",
+                  "        return cookie;",
                   "    }",
+                  "",
+                  "    const headers = pm.response.headers.all()",
+                  "        .filter(h => h.key.toLowerCase() === 'set-cookie')",
+                  "        .map(h => h.value);",
+                  "",
+                  "    for (const header of headers) {",
+                  "        const match = String(header).match(/PHPSESSID=([^;\\s]+)/i);",
+                  "        if (match) {",
+                  "            return match[1];",
+                  "        }",
+                  "    }",
+                  "",
+                  "    return null;",
+                  "}",
+                  "",
+                  "const cookie = extrairPhpSessId();",
+                  "if (cookie) {",
+                  "    // Environment tem precedencia sobre collection: salvar nos dois",
+                  "    pm.collectionVariables.set('token', cookie);",
+                  "    if (pm.environment) {",
+                  "        pm.environment.set('token', cookie);",
+                  "    }",
+                  "    console.log('token (PHPSESSID) salvo:', cookie);",
+                  "} else {",
+                  "    console.warn('PHPSESSID nao encontrado no cookie jar nem no Set-Cookie.');",
+                  "    console.warn('Em Postman: Cookies > habilite cookies para localhost:8000');",
                   "}"
                 ]
               }
@@ -126,7 +153,7 @@
               "raw": "{\n  \"email\": \"{{email}}\",\n  \"senha\": \"{{senha}}\"\n}"
             },
             "url": "{{baseUrl}}/api/login",
-            "description": "Salva PHPSESSID em {{token}} para as rotas protegidas."
+            "description": "Salva PHPSESSID em {{token}} (collection + environment) para as rotas protegidas."
           }
         },
         {
@@ -162,7 +189,8 @@
                 "value": "PHPSESSID={{token}}"
               }
             ],
-            "url": "{{baseUrl}}/api/clientes"
+            "url": "{{baseUrl}}/api/clientes",
+            "description": "Retorna id, codigo, nome, fantasia e documento de cada cliente."
           }
         },
         {
@@ -227,7 +255,7 @@
               "mode": "raw",
               "raw": "{\n  \"id\": {{id_cliente}},\n  \"nome\": \"Cliente Atualizado\"\n}"
             },
-            "url": "{{baseUrl}}/api/clientes"
+            "url": "{{baseUrl}}/api/cliente"
           }
         },
         {
@@ -248,7 +276,7 @@
               "mode": "raw",
               "raw": "{\n  \"id\": {{id_cliente}},\n  \"id_endereco\": {{id_endereco}},\n  \"cidade\": \"Campinas\",\n  \"bairro\": \"Centro\"\n}"
             },
-            "url": "{{baseUrl}}/api/clientes"
+            "url": "{{baseUrl}}/api/cliente"
           }
         },
         {
@@ -269,7 +297,7 @@
               "mode": "raw",
               "raw": "{\n  \"id\": {{id_cliente}},\n  \"codigo\": 2,\n  \"nome\": \"Cliente Completo\",\n  \"fantasia\": \"Fantasia Atualizada LTDA\",\n  \"documento\": \"98765432100\",\n  \"id_endereco\": {{id_endereco}},\n  \"cep\": \"13010000\",\n  \"estado\": \"SP\",\n  \"cidade\": \"Campinas\",\n  \"bairro\": \"Centro\",\n  \"rua\": \"Rua Barão de Jaguara\",\n  \"numero\": \"500\"\n}"
             },
-            "url": "{{baseUrl}}/api/clientes"
+            "url": "{{baseUrl}}/api/cliente"
           }
         },
         {
@@ -290,8 +318,130 @@
               "mode": "raw",
               "raw": "{\n  \"id\": {{id_cliente}},\n  \"documento\": \"12345678901\"\n}"
             },
-            "url": "{{baseUrl}}/api/clientes",
+            "url": "{{baseUrl}}/api/cliente",
             "description": "Esperado: 409 - Esse documento ja esta cadastrado. O banco valida duplicidade via UNIQUE."
+          }
+        },
+        {
+          "name": "Atualizar Cliente (nao encontrado)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 999999,\n  \"nome\": \"Cliente Inexistente\"\n}"
+            },
+            "url": "{{baseUrl}}/api/cliente",
+            "description": "Esperado: 404 - Cliente nao encontrado"
+          }
+        },
+        {
+          "name": "Inserir Endereco",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_cliente\": {{id_cliente}},\n  \"cep\": \"01310100\",\n  \"estado\": \"SP\",\n  \"cidade\": \"Sao Paulo\",\n  \"bairro\": \"Bela Vista\",\n  \"rua\": \"Av Paulista\",\n  \"numero\": \"1000\"\n}"
+            },
+            "url": "{{baseUrl}}/api/endereco",
+            "description": "POST /api/endereco. Adiciona um novo endereco ao cliente."
+          }
+        },
+        {
+          "name": "Inserir Endereco (cliente nao encontrado)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_cliente\": 999999,\n  \"cep\": \"01310100\",\n  \"estado\": \"SP\",\n  \"cidade\": \"Sao Paulo\",\n  \"bairro\": \"Bela Vista\",\n  \"rua\": \"Av Paulista\",\n  \"numero\": \"1000\"\n}"
+            },
+            "url": "{{baseUrl}}/api/endereco",
+            "description": "Esperado: 404 - Cliente nao encontrado"
+          }
+        },
+        {
+          "name": "Deletar Endereco",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/endereco?id={{id_endereco}}&id_cliente={{id_cliente}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "endereco"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{id_endereco}}"
+                },
+                {
+                  "key": "id_cliente",
+                  "value": "{{id_cliente}}"
+                }
+              ]
+            },
+            "description": "DELETE /api/endereco?id={{id_endereco}}&id_cliente={{id_cliente}}. Remove apenas o endereco do cliente."
+          }
+        },
+        {
+          "name": "Deletar Endereco (nao encontrado)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/endereco?id=999999&id_cliente={{id_cliente}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "endereco"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "999999"
+                },
+                {
+                  "key": "id_cliente",
+                  "value": "{{id_cliente}}"
+                }
+              ]
+            },
+            "description": "Esperado: 404 - Endereco nao encontrado para este cliente"
           }
         },
         {
@@ -357,7 +507,8 @@
                 "value": "PHPSESSID={{token}}"
               }
             ],
-            "url": "{{baseUrl}}/api/produtos"
+            "url": "{{baseUrl}}/api/produtos",
+            "description": "Retorna id, nome, codigo, valor e codigo_de_barras de cada produto."
           }
         },
         {
@@ -729,6 +880,9 @@
                 "exec": [
                   "if (pm.response.code === 200) {",
                   "    pm.collectionVariables.set('token', '');",
+                  "    if (pm.environment) {",
+                  "        pm.environment.set('token', '');",
+                  "    }",
                   "    console.log('token limpo apos desconectar');",
                   "}"
                 ]
@@ -757,6 +911,9 @@
                 "exec": [
                   "if (pm.response.code === 200) {",
                   "    pm.collectionVariables.set('token', '');",
+                  "    if (pm.environment) {",
+                  "        pm.environment.set('token', '');",
+                  "    }",
                   "    console.log('token limpo apos deletar usuario');",
                   "}"
                 ]

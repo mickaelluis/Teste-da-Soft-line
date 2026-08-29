@@ -5,15 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizar Produto</title>
     <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
     <script src="/assets/js/tema.js"></script>
 </head>
-<body>
-    <main class="login">
-        <section class="login__card">
-            <h1 class="login__titulo">Visualizar Produto</h1>
-            <p class="login__subtitulo">Página em construção</p>
-            <a class="botao botao--secundario" href="/produtos">Voltar à lista</a>
+<body class="app-body">
+    <header class="app-topo">
+        <a class="app-marca" href="/home">Sistema de Cadastro de Produtos</a>
+        <nav class="app-nav">
+            <a href="/home" data-nav="home">Home</a>
+            <a href="/produtos" data-nav="produtos">Produtos</a>
+            <a href="/clientes" data-nav="clientes">Clientes</a>
+            <a href="/usuario" data-nav="usuario">Usuário</a>
+        </nav>
+        <div class="app-acoes">
+            <span id="tema-slot"></span>
+            <button type="button" class="botao botao--pequeno botao--secundario" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <main class="app-conteudo">
+        <div class="pagina-cabecalho">
+            <div>
+                <h1>Visualizar Produto</h1>
+                <p>Detalhes do cadastro</p>
+            </div>
+            <div class="pagina-acoes">
+                <a class="botao botao--pequeno botao--secundario" href="/produtos">Voltar</a>
+            </div>
+        </div>
+
+        <section class="cartao">
+            <p class="carregando" id="ver-status">Carregando produto...</p>
+            <form class="ficha ficha--editavel" id="form-produto-ver" novalidate hidden>
+                <div>
+                    <dt>Código</dt>
+                    <dd class="ficha__valor" id="ver-codigo"></dd>
+                    <input class="ficha__input" type="text" id="input-codigo" inputmode="numeric" maxlength="10" hidden>
+                    <small class="campo__erro" id="erro-codigo"></small>
+                </div>
+                <div>
+                    <dt>Nome</dt>
+                    <dd class="ficha__valor" id="ver-nome"></dd>
+                    <input class="ficha__input" type="text" id="input-nome" maxlength="100" hidden>
+                    <small class="campo__erro" id="erro-nome"></small>
+                </div>
+                <div>
+                    <dt>Descrição</dt>
+                    <dd class="ficha__valor" id="ver-descricao"></dd>
+                    <input class="ficha__input" type="text" id="input-descricao" maxlength="60" hidden>
+                    <small class="campo__erro" id="erro-descricao"></small>
+                </div>
+                <div>
+                    <dt>Código de barras</dt>
+                    <dd class="ficha__valor" id="ver-codigo-barras"></dd>
+                    <input class="ficha__input" type="text" id="input-codigo-barras" maxlength="14" hidden>
+                    <small class="campo__erro" id="erro-codigo-barras"></small>
+                </div>
+                <div>
+                    <dt>Valor de venda</dt>
+                    <dd class="ficha__valor" id="ver-valor"></dd>
+                    <input class="ficha__input" type="text" id="input-valor" data-mascara="moeda" data-decimais="2" data-max-inteiros="8" maxlength="14" inputmode="decimal" hidden>
+                    <small class="campo__erro" id="erro-valor"></small>
+                </div>
+                <div>
+                    <dt>Peso bruto</dt>
+                    <dd class="ficha__valor" id="ver-peso-bruto"></dd>
+                    <input class="ficha__input" type="text" id="input-peso-bruto" data-mascara="peso" data-decimais="3" data-max-inteiros="7" maxlength="13" inputmode="decimal" hidden>
+                    <small class="campo__erro" id="erro-peso-bruto"></small>
+                </div>
+                <div>
+                    <dt>Peso líquido</dt>
+                    <dd class="ficha__valor" id="ver-peso-liquido"></dd>
+                    <input class="ficha__input" type="text" id="input-peso-liquido" data-mascara="peso" data-decimais="3" data-max-inteiros="7" maxlength="13" inputmode="decimal" hidden>
+                    <small class="campo__erro" id="erro-peso-liquido"></small>
+                </div>
+            </form>
+            <div class="pagina-acoes" id="acoes-produto" hidden>
+                <button type="button" class="botao botao--pequeno" id="botao-editar-produto">Editar</button>
+                <button type="button" class="botao botao--pequeno botao--perigo" id="botao-excluir">Excluir</button>
+            </div>
         </section>
     </main>
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/produto.js"></script>
 </body>
 </html>

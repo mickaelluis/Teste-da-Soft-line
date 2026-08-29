@@ -5,18 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home · Soft-line</title>
     <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
     <script src="/assets/js/tema.js"></script>
 </head>
-<body>
-    <main class="login">
-        <section class="login__card">
-            <p class="login__sistema">Sistema de Cadastro de Produtos</p>
-            <h1 class="login__titulo">Home</h1>
-            <p class="login__subtitulo">Escolha um módulo para continuar</p>
-            <a class="botao" href="/produtos">Produtos</a>
-            <a class="botao botao--secundario" href="/clientes">Clientes</a>
-            <a class="botao botao--secundario" href="/login">Sair</a>
+<body class="app-body">
+    <header class="app-topo">
+        <a class="app-marca" href="/home">Sistema de Cadastro de Produtos</a>
+        <nav class="app-nav">
+            <a href="/home" data-nav="home">Home</a>
+            <a href="/produtos" data-nav="produtos">Produtos</a>
+            <a href="/clientes" data-nav="clientes">Clientes</a>
+            <a href="/usuario" data-nav="usuario">Usuário</a>
+        </nav>
+        <div class="app-acoes">
+            <span id="tema-slot"></span>
+            <button type="button" class="botao botao--pequeno botao--secundario" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <main class="app-conteudo">
+        <div class="pagina-cabecalho">
+            <div>
+                <h1>Home</h1>
+                <p>Escolha um módulo para continuar</p>
+            </div>
+        </div>
+
+        <section class="modulos">
+            <a class="modulo" href="/produtos">
+                <h2>Produtos</h2>
+                <p>Listar, cadastrar, visualizar, editar e excluir produtos.</p>
+            </a>
+            <a class="modulo" href="/clientes">
+                <h2>Clientes</h2>
+                <p>Listar, cadastrar, visualizar, editar e excluir clientes.</p>
+            </a>
         </section>
     </main>
+    <script src="/assets/js/app.js"></script>
 </body>
 </html>

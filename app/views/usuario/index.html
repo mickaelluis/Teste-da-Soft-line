@@ -5,15 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuário</title>
     <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
     <script src="/assets/js/tema.js"></script>
 </head>
-<body>
-    <main class="login">
-        <section class="login__card">
-            <h1 class="login__titulo">Usuário</h1>
-            <p class="login__subtitulo">Página em construção</p>
-            <a class="botao botao--secundario" href="/home">Voltar</a>
-        </section>
+<body class="app-body">
+    <header class="app-topo">
+        <a class="app-marca" href="/home">Sistema de Cadastro de Produtos</a>
+        <nav class="app-nav">
+            <a href="/home" data-nav="home">Home</a>
+            <a href="/produtos" data-nav="produtos">Produtos</a>
+            <a href="/clientes" data-nav="clientes">Clientes</a>
+            <a href="/usuario" data-nav="usuario">Usuário</a>
+        </nav>
+        <div class="app-acoes">
+            <span id="tema-slot"></span>
+            <button type="button" class="botao botao--pequeno botao--secundario" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <main class="app-conteudo">
+        <div class="pagina-cabecalho">
+            <div>
+                <h1>Usuário</h1>
+                <p>Atualize os dados da sua conta</p>
+            </div>
+        </div>
+
+        <form class="cartao form-grade form-grade--2" id="form-usuario" novalidate>
+            <label class="campo" for="nome">
+                <span>Nome</span>
+                <input type="text" id="nome" name="nome" maxlength="60" required>
+                <small class="campo__erro" id="erro-nome"></small>
+            </label>
+
+            <label class="campo" for="email">
+                <span>E-mail</span>
+                <input type="email" id="email" name="email" maxlength="100" required>
+                <small class="campo__erro" id="erro-email"></small>
+            </label>
+
+            <label class="campo" for="senha">
+                <span>Nova senha</span>
+                <input type="password" id="senha" name="senha" autocomplete="new-password">
+                <small class="campo__erro" id="erro-senha"></small>
+            </label>
+
+            <label class="campo" for="confirmar-senha">
+                <span>Confirmar senha</span>
+                <input type="password" id="confirmar-senha" name="confirm_senha" autocomplete="new-password">
+                <small class="campo__erro" id="erro-confirmar-senha"></small>
+            </label>
+
+            <div class="form-acoes campo--largo">
+                <button type="submit" class="botao" id="botao-salvar">Salvar</button>
+                <button type="button" class="botao botao--perigo" id="botao-excluir-conta">Excluir conta</button>
+            </div>
+        </form>
     </main>
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/usuario.js"></script>
 </body>
 </html>

@@ -37,7 +37,8 @@ function criarBotaoTema() {
         aplicarTema(proximo);
     });
 
-    document.body.appendChild(botao);
+    const slot = document.getElementById("tema-slot");
+    (slot || document.body).appendChild(botao);
     atualizarBotao(temaSalvo());
 }
 

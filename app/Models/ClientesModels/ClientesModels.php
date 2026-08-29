@@ -19,7 +19,13 @@ class ClientesModels{
             throw new \RuntimeException;
         }
         $stmt->closeCursor();
-        return $clientes;
+        return array_map(fn(array $cliente) => [
+            'id' => $cliente['id'] ?? null,
+            'codigo' => $cliente['codigo'] ?? null,
+            'nome' => $cliente['nome'] ?? null,
+            'fantasia' => $cliente['fantasia'] ?? null,
+            'documento' => $cliente['documento'] ?? null,
+        ], $clientes);
     }
 
     public function buscar_Cliente($id_cliente, $id){
@@ -178,6 +184,49 @@ class ClientesModels{
         try {
             $this->validar_cliente($id_cliente, $id);
             $stmt->execute([$id, $id_cliente]);
+        } catch (RegistroNaoEncontrado $e) {
+            throw $e;
+        } catch (\PDOException $e) {
+            $stmt->closeCursor();
+            error_log($e->getMessage());
+            throw new \RuntimeException;
+        }
+        $stmt->closeCursor();
+        return true;
+    }
+
+    public function deletar_Endereco($id_endereco, $id_cliente, $id){
+        $conexao = Database::conectar();
+        $stmt = $conexao->prepare("CALL deletar_endereco(?, ?)");
+        try {
+            $this->validar_cliente($id_cliente, $id);
+            $this->validar_endereco_cliente($id_endereco, $id_cliente);
+            $stmt->execute([$id_cliente, $id_endereco]);
+        } catch (RegistroNaoEncontrado $e) {
+            throw $e;
+        } catch (\PDOException $e) {
+            $stmt->closeCursor();
+            error_log($e->getMessage());
+            throw new \RuntimeException;
+        }
+        $stmt->closeCursor();
+        return true;
+    }
+
+    public function inserir_Endereco($id_cliente, $id, $endereco){
+        $conexao = Database::conectar();
+        $stmt = $conexao->prepare("CALL inserir_endereco(?, ?, ?, ?, ?, ?, ?)");
+        try {
+            $this->validar_cliente($id_cliente, $id);
+            $stmt->execute([
+                $id_cliente,
+                $endereco['cep'],
+                $endereco['estado'],
+                $endereco['cidade'],
+                $endereco['bairro'],
+                $endereco['rua'],
+                $endereco['numero']
+            ]);
         } catch (RegistroNaoEncontrado $e) {
             throw $e;
         } catch (\PDOException $e) {

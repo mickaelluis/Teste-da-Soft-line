@@ -3,6 +3,7 @@
 namespace App\Controllers\AuthController;
 use App\Controllers\BaseController;
 use App\Models\AuthModels\LoginModels;
+use App\Exceptions\FalhaDeConexao;
 
 class Login extends BaseController{
     public function entrar(){
@@ -22,6 +23,8 @@ class Login extends BaseController{
             $_SESSION['id_usuario'] = $usuario['id'];
             $_SESSION['email'] = $email;
             return $this->responder(200, "Logado com sucesso, seja bem vindo {$usuario["nome"]}" ); 
+        } catch (FalhaDeConexao $e) {
+            return $this->responder(500, "Falha ao conectar no banco de dados");
         } catch (\Throwable $e) {
             error_log($e->getMessage());
             return $this->responder(500, "Falha ao fazer login, tente mais tarde!");

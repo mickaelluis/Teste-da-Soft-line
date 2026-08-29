@@ -5,16 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Clientes</title>
     <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
     <script src="/assets/js/tema.js"></script>
 </head>
-<body>
-    <main class="login">
-        <section class="login__card">
-            <h1 class="login__titulo">Lista de Clientes</h1>
-            <p class="login__subtitulo">Página em construção</p>
-            <a class="botao" href="/clientes/cadastro">Novo cliente</a>
-            <a class="botao botao--secundario" href="/home">Voltar</a>
+<body class="app-body">
+    <header class="app-topo">
+        <a class="app-marca" href="/home">Sistema de Cadastro de Produtos</a>
+        <nav class="app-nav">
+            <a href="/home" data-nav="home">Home</a>
+            <a href="/produtos" data-nav="produtos">Produtos</a>
+            <a href="/clientes" data-nav="clientes">Clientes</a>
+            <a href="/usuario" data-nav="usuario">Usuário</a>
+        </nav>
+        <div class="app-acoes">
+            <span id="tema-slot"></span>
+            <button type="button" class="botao botao--pequeno botao--secundario" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <main class="app-conteudo">
+        <div class="pagina-cabecalho">
+            <div>
+                <h1>Lista de Clientes</h1>
+                <p>Cadastros do seu usuário</p>
+            </div>
+            <div class="pagina-acoes">
+                <a class="botao botao--pequeno" href="/clientes/cadastro">Novo cliente</a>
+            </div>
+        </div>
+
+        <section class="cartao">
+            <p class="carregando" id="lista-status">Carregando clientes...</p>
+            <p class="vazio" id="lista-vazia" hidden>Você não tem nenhum cliente cadastrado.</p>
+            <div class="tabela-wrap" id="lista-tabela" hidden>
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Fantasia</th>
+                            <th>Documento</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-corpo"></tbody>
+                </table>
+            </div>
         </section>
     </main>
+    <script src="/assets/js/app.js?v=20260828"></script>
+    <script src="/assets/js/cliente.js?v=20260828"></script>
 </body>
 </html>

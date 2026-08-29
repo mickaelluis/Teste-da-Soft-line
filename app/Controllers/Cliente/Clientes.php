@@ -34,6 +34,11 @@ class Clientes extends BaseController{
                 }
             }
             
+            if (filter_var($codigo, FILTER_VALIDATE_INT) === false) {
+                return $this->responder(400, "Campo codigo so pode ser numerico");
+            }
+            $codigo = (int) $codigo;
+
             if( mb_strlen($nome) > 60){
                 return $this->responder(400, "Campo nome deve ter menos que 60 caracteres");
             }
@@ -110,6 +115,13 @@ class Clientes extends BaseController{
                 return $this->responder(400, "Campo obrigatório: id");
             }
 
+            if ($codigo !== null) {
+                if (filter_var($codigo, FILTER_VALIDATE_INT) === false) {
+                    return $this->responder(400, "Campo codigo so pode ser numerico");
+                }
+                $codigo = (int) $codigo;
+            }
+
             if ($nome !== null && mb_strlen($nome) > 60){
                 return $this->responder(400, "Campo nome deve ter menos que 60 caracteres");
             }
@@ -180,6 +192,69 @@ class Clientes extends BaseController{
         } catch (\Throwable $e) {
             error_log($e->getMessage());
             return $this->responder(500, "Falha ao deletar cliente, tente mais tarde!");
+        }
+    }
+
+    public function deletar_Endereco(){
+        try {
+            $id = $_SESSION['id_usuario'] ?? null;
+            $id_endereco = $_GET['id'] ?? null;
+            $id_cliente = $_GET['id_cliente'] ?? null;
+            if ($id_endereco === null || trim((string)$id_endereco) === '') {
+                return $this->responder(400, "Campo obrigatório: id");
+            }
+            if ($id_cliente === null || trim((string)$id_cliente) === '') {
+                return $this->responder(400, "Campo obrigatório: id_cliente");
+            }
+            $ClienteModels = new ClientesModels();
+            $ClienteModels->deletar_Endereco($id_endereco, $id_cliente, $id);
+            return $this->responder(200, "Endereco deletado com sucesso!!!");
+        } catch (RegistroNaoEncontrado $e) {
+            return $this->responder(404, $this->mensagem_nao_encontrado($e));
+        } catch (FalhaDeConexao $e) {
+            return $this->responder(500, "Falha ao conectar no banco de dados");
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+            return $this->responder(500, "Falha ao deletar endereco, tente mais tarde!");
+        }
+    }
+
+    public function inserir_Endereco(){
+        try {
+            $dados = json_decode(file_get_contents('php://input'), true);
+            $id = $_SESSION['id_usuario'] ?? null;
+            $id_cliente = $dados['id_cliente'] ?? null;
+            $endereco = [
+                'cep'    => $dados['cep'] ?? null,
+                'estado' => $dados['estado'] ?? null,
+                'cidade' => $dados['cidade'] ?? null,
+                'bairro' => $dados['bairro'] ?? null,
+                'rua'    => $dados['rua'] ?? null,
+                'numero' => $dados['numero'] ?? null,
+            ];
+
+            if ($id_cliente === null || trim((string)$id_cliente) === '') {
+                return $this->responder(400, "Campo obrigatório: id_cliente");
+            }
+
+            $obrigatorios = ['cep', 'estado', 'cidade', 'bairro', 'rua', 'numero'];
+            foreach ($obrigatorios as $campo) {
+                $valor = $dados[$campo] ?? null;
+                if ($valor === null || trim((string)$valor) === '') {
+                    return $this->responder(400, "Campo obrigatório: {$campo}");
+                }
+            }
+
+            $ClienteModels = new ClientesModels();
+            $ClienteModels->inserir_Endereco($id_cliente, $id, $endereco);
+            return $this->responder(200, "Endereco criado com sucesso!!!");
+        } catch (RegistroNaoEncontrado $e) {
+            return $this->responder(404, $this->mensagem_nao_encontrado($e));
+        } catch (FalhaDeConexao $e) {
+            return $this->responder(500, "Falha ao conectar no banco de dados");
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+            return $this->responder(500, "Falha ao criar endereco, tente mais tarde!");
         }
     }
 

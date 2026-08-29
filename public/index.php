@@ -4,6 +4,14 @@
  * Bootstrap da aplicação Soft-line.
  */
 
+if (PHP_SAPI === 'cli-server') {
+    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    $file = __DIR__ . $path;
+    if ($path !== '/' && is_file($file)) {
+        return false;
+    }
+}
+
 $backendRoot = dirname(__DIR__) . '/app';
 
 $autoload = dirname(__DIR__) . '/vendor/autoload.php';
@@ -41,16 +49,21 @@ $router->get('/usuario', 'App\Controllers\Usuario\UsuarioPages@index', "App\Midd
 // Rotas Backend (API JSON)
 $router->post('/api/login', 'App\Controllers\AuthController\Login@entrar');
 $router->post('/api/register', 'App\Controllers\AuthController\Register@cadastrar');
+
 $router->get('/api/clientes', 'App\Controllers\Cliente\Clientes@listar_Clientes', "App\Middlewares\AuthMiddleware@verificar");
 $router->get('/api/cliente', 'App\Controllers\Cliente\Clientes@buscar_Cliente', "App\Middlewares\AuthMiddleware@verificar");
 $router->post('/api/clientes', 'App\Controllers\Cliente\Clientes@inserir_Clientes', "App\Middlewares\AuthMiddleware@verificar");
-$router->put('/api/clientes', 'App\Controllers\Cliente\Clientes@atualizar_Cliente', "App\Middlewares\AuthMiddleware@verificar");
+$router->put('/api/cliente', 'App\Controllers\Cliente\Clientes@atualizar_Cliente', "App\Middlewares\AuthMiddleware@verificar");
 $router->delete('/api/cliente', 'App\Controllers\Cliente\Clientes@deletar_Cliente', "App\Middlewares\AuthMiddleware@verificar");
+$router->post('/api/endereco', 'App\Controllers\Cliente\Clientes@inserir_Endereco', "App\Middlewares\AuthMiddleware@verificar");
+$router->delete('/api/endereco', 'App\Controllers\Cliente\Clientes@deletar_Endereco', "App\Middlewares\AuthMiddleware@verificar");
+
 $router->get('/api/produtos', 'App\Controllers\Produto\Produto@listar_Produtos', "App\Middlewares\AuthMiddleware@verificar");
 $router->get('/api/produto', 'App\Controllers\Produto\Produto@buscar_Produto', "App\Middlewares\AuthMiddleware@verificar");
 $router->post('/api/produtos', 'App\Controllers\Produto\Produto@inserir_Produto', "App\Middlewares\AuthMiddleware@verificar");
 $router->put('/api/produtos', 'App\Controllers\Produto\Produto@atualizar_Produto', "App\Middlewares\AuthMiddleware@verificar");
 $router->delete('/api/produto', 'App\Controllers\Produto\Produto@deletar_Produto', "App\Middlewares\AuthMiddleware@verificar");
+
 $router->get('/api/usuario', 'App\Controllers\Usuario\Usuario@buscar_Usuario', "App\Middlewares\AuthMiddleware@verificar");
 $router->put('/api/usuario', 'App\Controllers\Usuario\Usuario@atualizar_Usuario', "App\Middlewares\AuthMiddleware@verificar");
 $router->delete('/api/usuario', 'App\Controllers\Usuario\Usuario@deletar_Usuario', "App\Middlewares\AuthMiddleware@verificar");

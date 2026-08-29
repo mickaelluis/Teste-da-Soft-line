@@ -5,15 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Produto</title>
     <link rel="stylesheet" href="/assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
     <script src="/assets/js/tema.js"></script>
 </head>
-<body>
-    <main class="login">
-        <section class="login__card">
-            <h1 class="login__titulo">Cadastro de Produto</h1>
-            <p class="login__subtitulo">Página em construção</p>
-            <a class="botao botao--secundario" href="/produtos">Voltar à lista</a>
-        </section>
+<body class="app-body">
+    <header class="app-topo">
+        <a class="app-marca" href="/home">Sistema de Cadastro de Produtos</a>
+        <nav class="app-nav">
+            <a href="/home" data-nav="home">Home</a>
+            <a href="/produtos" data-nav="produtos">Produtos</a>
+            <a href="/clientes" data-nav="clientes">Clientes</a>
+            <a href="/usuario" data-nav="usuario">Usuário</a>
+        </nav>
+        <div class="app-acoes">
+            <span id="tema-slot"></span>
+            <button type="button" class="botao botao--pequeno botao--secundario" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <main class="app-conteudo">
+        <div class="pagina-cabecalho">
+            <div>
+                <h1 id="pagina-titulo">Cadastro de Produto</h1>
+                <p id="pagina-subtitulo">Preencha os dados do produto</p>
+            </div>
+        </div>
+
+        <form class="cartao form-grade form-grade--2" id="form-produto" novalidate>
+            <label class="campo" for="codigo">
+                <span>Código</span>
+                <input type="text" id="codigo" name="codigo" inputmode="numeric" maxlength="10" required>
+                <small class="campo__erro" id="erro-codigo"></small>
+            </label>
+
+            <label class="campo" for="nome">
+                <span>Nome</span>
+                <input type="text" id="nome" name="nome" maxlength="100" required>
+                <small class="campo__erro" id="erro-nome"></small>
+            </label>
+
+            <label class="campo campo--largo" for="descricao">
+                <span>Descrição</span>
+                <input type="text" id="descricao" name="descricao" maxlength="60" required>
+                <small class="campo__erro" id="erro-descricao"></small>
+            </label>
+
+            <label class="campo" for="codigo-barras">
+                <span>Código de barras</span>
+                <input type="text" id="codigo-barras" name="codigo_de_barras" maxlength="14" required>
+                <small class="campo__erro" id="erro-codigo-barras"></small>
+            </label>
+
+            <label class="campo" for="valor">
+                <span>Valor de venda</span>
+                <input type="text" id="valor" name="valor" inputmode="decimal" data-mascara="moeda" data-decimais="2" data-max-inteiros="8" maxlength="14" required>
+                <small class="campo__erro" id="erro-valor"></small>
+            </label>
+
+            <label class="campo" for="peso-bruto">
+                <span>Peso bruto</span>
+                <input type="text" id="peso-bruto" name="peso_bruto" inputmode="decimal" data-mascara="peso" data-decimais="3" data-max-inteiros="7" maxlength="13" required>
+                <small class="campo__erro" id="erro-peso-bruto"></small>
+            </label>
+
+            <label class="campo" for="peso-liquido">
+                <span>Peso líquido</span>
+                <input type="text" id="peso-liquido" name="peso_liquido" inputmode="decimal" data-mascara="peso" data-decimais="3" data-max-inteiros="7" maxlength="13" required>
+                <small class="campo__erro" id="erro-peso-liquido"></small>
+            </label>
+
+            <div class="form-acoes campo--largo">
+                <button type="submit" class="botao" id="botao-salvar">Confirmar</button>
+                <a class="botao botao--secundario" href="/produtos">Voltar à lista</a>
+            </div>
+        </form>
     </main>
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/produto.js"></script>
 </body>
 </html>
