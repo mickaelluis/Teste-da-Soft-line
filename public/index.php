@@ -61,7 +61,7 @@ $router->delete('/api/endereco', 'App\Controllers\Cliente\Clientes@deletar_Ender
 $router->get('/api/produtos', 'App\Controllers\Produto\Produto@listar_Produtos', "App\Middlewares\AuthMiddleware@verificar");
 $router->get('/api/produto', 'App\Controllers\Produto\Produto@buscar_Produto', "App\Middlewares\AuthMiddleware@verificar");
 $router->post('/api/produtos', 'App\Controllers\Produto\Produto@inserir_Produto', "App\Middlewares\AuthMiddleware@verificar");
-$router->put('/api/produtos', 'App\Controllers\Produto\Produto@atualizar_Produto', "App\Middlewares\AuthMiddleware@verificar");
+$router->put('/api/produto', 'App\Controllers\Produto\Produto@atualizar_Produto', "App\Middlewares\AuthMiddleware@verificar");
 $router->delete('/api/produto', 'App\Controllers\Produto\Produto@deletar_Produto', "App\Middlewares\AuthMiddleware@verificar");
 
 $router->get('/api/usuario', 'App\Controllers\Usuario\Usuario@buscar_Usuario', "App\Middlewares\AuthMiddleware@verificar");

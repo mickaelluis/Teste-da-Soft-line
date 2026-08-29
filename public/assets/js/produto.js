@@ -155,7 +155,7 @@ async function carregarFormularioProduto() {
                 peso_liquido: decimalParaNumero(pesoLiquido.value),
             };
 
-            const url = id ? "/api/produtos" : "/api/produtos";
+            const url = id ? "/api/produto" : "/api/produtos";
             const metodo = id ? "PUT" : "POST";
             if (id) {
                 dados.id = Number(id);
@@ -289,7 +289,7 @@ async function carregarVisualizarProduto() {
         botaoEditar.disabled = true;
 
         try {
-            const { ok, corpo } = await requisitar("/api/produtos", {
+            const { ok, corpo } = await requisitar("/api/produto", {
                 method: "PUT",
                 body: JSON.stringify({
                     id: Number(id),

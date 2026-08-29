@@ -619,7 +619,7 @@
               "mode": "raw",
               "raw": "{\n  \"id\": {{id_produto}},\n  \"nome\": \"Produto Atualizado\"\n}"
             },
-            "url": "{{baseUrl}}/api/produtos"
+            "url": "{{baseUrl}}/api/produto"
           }
         },
         {
@@ -640,7 +640,7 @@
               "mode": "raw",
               "raw": "{\n  \"id\": {{id_produto}},\n  \"nome\": \"Produto Completo\",\n  \"codigo\": 3,\n  \"descricao\": \"Descricao atualizada\",\n  \"codigo_de_barras\": \"7899999999999\",\n  \"valor\": 29.90,\n  \"peso_bruto\": 2.000,\n  \"peso_liquido\": 1.800\n}"
             },
-            "url": "{{baseUrl}}/api/produtos"
+            "url": "{{baseUrl}}/api/produto"
           }
         },
         {
@@ -661,7 +661,7 @@
               "mode": "raw",
               "raw": "{\n  \"id\": {{id_produto}},\n  \"codigo_de_barras\": \"7891234567890\"\n}"
             },
-            "url": "{{baseUrl}}/api/produtos",
+            "url": "{{baseUrl}}/api/produto",
             "description": "Esperado: 409 - Esse codigo de barras ja esta cadastrado, tente outro!"
           }
         },
@@ -683,7 +683,7 @@
               "mode": "raw",
               "raw": "{\n  \"id\": 999999,\n  \"nome\": \"Produto Inexistente\"\n}"
             },
-            "url": "{{baseUrl}}/api/produtos",
+            "url": "{{baseUrl}}/api/produto",
             "description": "Esperado: 404 - Produto nao encontrado"
           }
         },
