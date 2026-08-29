@@ -1,5 +1,6 @@
 # Dependências
 /vendor/
+composer.phar
 
 # Ambiente / segredos
 .env

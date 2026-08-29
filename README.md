@@ -138,7 +138,7 @@ Se o MySQL estiver em outra porta, ajuste `DB_PORT`.
 
 ### 3. Dependências PHP
 
-Na raiz do projeto:
+Instale o [Composer](https://getcomposer.org/download/) na máquina (não versionamos `composer.phar` no repositório). Na raiz do projeto:
 
 ```bash
 composer install
